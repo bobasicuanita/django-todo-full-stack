@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css_files %} <link rel="stylesheet" href="{% static 'todo/css/todo-list.css' %}">
+{% endblock %}
+
+{% block title %}
+Todos
+{% endblock %}
+
+{% block content %}
+
+<main class="todo-page">
+    <header class="todo-header">
+        <div>
+            <p class="eyebrow">Your tasks</p>
+            <h1>Todos</h1>
+            <p class="subtitle">Stay on top of what needs to get done.</p>
+        </div>
+        <div class="todo-header__actions">
+            <a href="{% url 'create-todo' %}" class="create-button">
+                + New Todo
+            </a>
+            <div class="todo-filters" aria-label="Todo filters">
+                <a href="{% url 'todo-list' %}" class="filter-pill" id="all">
+                    All
+                </a>
+                <a href="?marked_done=false" class="filter-pill filter-pill--pending">
+                    Pending
+                </a>
+                <a href="?is_overdue=true" class="filter-pill filter-pill--overdue">
+                    Overdue
+                </a>
+                <a href="?marked_done=true" class="filter-pill filter-pill--marked_done">
+                    Marked Done
+                </a>
+                <a href="?urgency=high" class="filter-pill filter-pill--high">
+                    High
+                </a>
+                <a href="?urgency=medium" class="filter-pill filter-pill--medium">
+                    Medium
+                </a>
+                <a href="?urgency=low" class="filter-pill filter-pill--low">
+                    Low
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <ul class="todo-list">
+        {% for todo in all_todos %}
+            <li class="todo-card {% if todo.marked_done %}todo-card--done{% endif %}">
+                <button
+                    type="button"
+                    class="delete-button"
+                    title="Delete {{ todo.title }}"
+                    aria-label="Delete {{ todo.title }}"
+                    data-delete-url="{% url 'delete-todo' todo.pk %}"
+                >
+                    🗑
+                </button>
+                <div class="todo-card__content">
+                    <div class="todo-card__header">
+                        <div class="todo-title">
+                            <h2>
+                                <a href="{% url 'todo-detail' todo.slug %}">
+                                    {{ todo.title }}
+                                </a>
+                            </h2>
+
+                            {% if todo.urgency %}
+                                <span class="badge badge--urgency badge--{{ todo.urgency.choice|lower }}">
+                                    {{ todo.urgency.get_choice_display }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="todo-badges">
+                            {% if todo.is_overdue %}
+                                <span class="badge badge--overdue">
+                                    Overdue
+                                </span>
+                            {% endif %}
+
+                            {% if not todo.marked_done %}
+                                <span class="badge badge--pending">
+                                    Pending
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if todo.description %}
+                        <p class="todo-description">
+                            {{ todo.description }}
+                        </p>
+                    {% endif %}
+                    <div class="todo-card__footer">
+                        <span class="todo-date">
+                            Due {{ todo.date|date:"M j, Y" }}
+                        </span>
+
+                        {% if not todo.marked_done %}
+                            <form
+                                action="{% url 'mark-done' todo.slug %}"
+                                method="post"
+                            >
+                                {% csrf_token %}
+                                <button type="submit" class="done-button">
+                                    Mark as done
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if todo.marked_done %}
+                    <span class="completed-check" title="Completed">
+                        ✓
+                    </span>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li class="empty-state">
+                <h2>No todos found</h2>
+                <p>
+                    Create your first todo and get things moving.
+                </p>
+                <a href="{% url 'create-todo' %}" class="create-button">
+                    Create Todo
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="logout-container">
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">
+                Logout
+            </button>
+        </form>
+    </div>
+</main>
+
+<div class="modal hidden" id="delete-modal" aria-hidden="true">
+    <div class="modal__backdrop"></div>
+    <div
+        class="modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
+    >
+        <div class="modal__content">
+            <h2 id="delete-modal-title">Delete todo?</h2>
+            <p id="delete-modal-description">
+                Are you sure you want to delete
+                <strong id="delete-todo-title"></strong>?
+                This action cannot be undone.
+            </p>
+        </div>
+        <div class="modal__actions">
+            <button
+                type="button"
+                class="modal__cancel"
+                id="cancel-delete"
+            >
+                Cancel
+            </button>
+            <form
+                id="confirm-delete-form"
+                method="post"
+                class="modal__delete-form"
+            >
+                {% csrf_token %}
+                <button
+                    type="submit"
+                    class="modal__delete"
+                    id="confirm-delete"
+                >
+                    Delete Todo
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %} <script src="{% static 'todo/js/allTodos.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,122 @@
+
+.error-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    color: #1f2937;
+    background: #f8fafc;
+}
+
+.error-card {
+    width: 100%;
+    max-width: 520px;
+    padding: 3rem 2.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    background: #ffffff;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+    text-align: center;
+}
+
+.error-icon {
+    display: grid;
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: 0 auto 1.5rem;
+    place-items: center;
+    border: 1px solid #c7d2fe;
+    border-radius: 1.25rem;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.error-card .eyebrow {
+    margin-bottom: 0.5rem;
+    color: #6366f1;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.error-card h1 {
+    margin: 0;
+    color: #111827;
+    font-size: 2.25rem;
+    line-height: 1.2;
+}
+
+.error-description {
+    max-width: 380px;
+    margin: 1rem auto 0;
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.error-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.error-actions .create-button {
+    width: auto;
+}
+
+.secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.65rem;
+    background: #ffffff;
+    color: #374151;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.secondary-button:hover {
+    border-color: #c7d2fe;
+    background: #eef2ff;
+    transform: translateY(-1px);
+}
+
+.error-actions a:focus-visible,
+.secondary-button:focus-visible {
+    outline: 3px solid rgba(79, 70, 229, 0.3);
+    outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+    .error-card {
+        padding: 2.25rem 1.25rem;
+    }
+
+    .error-card h1 {
+        font-size: 1.8rem;
+    }
+
+    .error-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .error-actions .create-button,
+    .secondary-button {
+        width: 100%;
+    }
+}

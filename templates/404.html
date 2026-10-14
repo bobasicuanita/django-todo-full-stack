@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Page Not Found | Todo{% endblock %}
+
+{% block css_files %} <link rel="stylesheet" href="{% static '404.css' %}">
+{% endblock %}
+
+{% block content %} 
+<main class="error-page">
+    <section class="error-card">
+        <div class="error-icon" aria-hidden="true">!</div>
+        <p class="eyebrow">Error 404</p>
+        <h1>Page not found</h1>
+        <p class="error-description">Looks like this page doesn't exist.</p>
+        <div class="error-actions">
+            <a href="/" class="create-button">
+                Back to home
+            </a>
+            <button
+                type="button"
+                class="secondary-button"
+                onclick="history.back()"
+            >
+                Go back
+            </button>
+        </div>
+    </section>
+</main>
+{% endblock %}

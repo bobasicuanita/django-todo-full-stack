@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'todo/css/todo-form.css' %}">
+{% endblock %}
+
+{% block title %}
+Edit {{ todo.title }} Todo
+{% endblock %}
+
+{% block content %} <main class="todo-form-page">
+    <header class="todo-form-header">
+        <p class="eyebrow">Update task</p>
+        <h1>Edit Todo</h1>
+        <p class="subtitle">Make changes to "{{ todo.title }}".</p>
+    </header>
+    <form
+        action="{% url 'todo-detail' todo.slug %}"
+        method="post"
+        class="todo-form"
+    >
+        {% csrf_token %}
+        {% for form_field in todo_form %}
+            <div class="form-control {% if form_field.errors %}invalid{% endif %}">
+                {{ form_field.label_tag }}
+                {{ form_field }}
+                {% if form_field.errors %}
+                    <div class="form-errors">
+                        {{ form_field.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <a href="{% url 'todo-list' %}" class="cancel-button">
+                Cancel
+            </a>
+            <button type="submit" class="save-button">
+                Save changes
+            </button>
+        </div>
+    </form>
+</main>
+{% endblock %}

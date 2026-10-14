@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'accounts/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <header class="auth-header">
+        <p class="eyebrow">Welcome back</p>
+        <h1>Login</h1>
+    </header>
+    {% if messages %}
+        {% for message in messages %}
+            <p class="auth-success-message">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    <form action="{% url 'login-form' %}" method="post" class="auth-form login-form">
+        {% csrf_token %}
+        {% for form_field in form %}
+            <div class="form-control {% if form_field.errors %}invalid{% endif %}">
+                {{ form_field.label_tag }}
+                {{ form_field }}
+
+                {% if form_field.errors %}
+                    <div class="form-errors">
+                        {{ form_field.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {% if form.non_field_errors %}
+            <div class="form-errors form-errors--general">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        <p class="forgot-password">Forgot your password? <a href="{% url 'forgot-password' %}">Reset</a></p>
+        <div class="form-actions">
+            <button type="submit" class="auth-button">
+                Login
+            </button>
+        </div>
+        <p class="auth-footer">Don't have an account? <a href="{% url 'signup-form' %}">Create one</a></p>
+    </form>
+</div>
+{% endblock %}
